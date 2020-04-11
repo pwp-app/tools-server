@@ -2,10 +2,9 @@
 
 'use strict';
 
-/**
- * @param {Egg.EggAppInfo} appInfo app info
- */
-module.exports = appInfo => {
+const keys = require('./keys');
+
+module.exports = () => {
     /**
      * built-in config
      * @type {Egg.EggAppConfig}
@@ -25,6 +24,9 @@ module.exports = appInfo => {
         xframe: {
             value: 'SAMEORIGIN',
         },
+        csrf: {
+            enable: false,
+        },
     };
 
     config.cors = {
@@ -34,6 +36,15 @@ module.exports = appInfo => {
     config.validate = {
         convert: true,
         widelyUndefined: true,
+    };
+
+    config.redis = {
+        client: {
+            port: 6379,
+            host: '127.0.0.1',
+            password: keys.redis,
+            db: 0,
+        },
     };
 
     config.onerror = {
@@ -60,7 +71,7 @@ module.exports = appInfo => {
     };
 
     // use for cookie sign key, should change to your own and keep security
-    config.keys = appInfo.name + '_1586501413819_4461';
+    config.keys = keys.cookie;
 
     // add your middleware config here
     config.middleware = ['notfoundHandler'];
