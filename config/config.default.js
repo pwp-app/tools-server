@@ -20,7 +20,6 @@ module.exports = () => {
     };
 
     config.security = {
-        domainWhiteList: ['http://localhost:7700', 'https://common-api.pwp.app'],
         xframe: {
             value: 'SAMEORIGIN',
         },
@@ -30,6 +29,7 @@ module.exports = () => {
     };
 
     config.cors = {
+        origin: '*',
         allowMethods: 'GET,POST',
     };
 
