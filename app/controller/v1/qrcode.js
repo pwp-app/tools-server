@@ -86,7 +86,7 @@ class QRCodeController extends Controller {
         }
         let image = null;
         try {
-            image = await jimp.read(ctx.request.body.url);
+            image = await jimp.read(url);
         } catch (e) {
             ErrorMessage(ctx, 500, 'Cannot download image from URL.');
             return false;
@@ -134,7 +134,7 @@ class QRCodeController extends Controller {
 
     async decodeGet() {
         const { ctx } = this;
-        ctx.validate({ url: 'url' });
+        ctx.validate({ url: 'url' }, ctx.query);
         await this.decodeByURL(ctx, ctx.query.url);
     }
 
@@ -147,7 +147,7 @@ class QRCodeController extends Controller {
         }
         if (ctx.request.body.url) {
             // 检查缓存
-            await this.decodeByURL(ctx, ctx.requset.body.url);
+            await this.decodeByURL(ctx, ctx.request.body.url);
         } else if (ctx.request.body.base64) {
             await this.decodeByBase64(ctx, ctx.request.body.base64);
         }
