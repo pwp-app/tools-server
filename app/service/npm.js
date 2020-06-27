@@ -8,14 +8,14 @@ const API_URL = 'https://api.npmjs.org';
 
 class NpmService extends Service {
     async getRegistry(name) {
-        const cached = this.service.redis.get(`npm_registry_${name}`);
+        const cached = await this.service.redis.get(`npm_registry_${name}`);
         if (cached) {
             return cached;
         }
         try {
             const res = await axios.get(`${REGISTRY_URL}/${name}`);
             if (res.data) {
-                this.service.redis.set(`npm_registry_${name}`, res.data, 1800);
+                await this.service.redis.set(`npm_registry_${name}`, res.data, 1800);
                 return res.data;
             }
             return null;
@@ -24,14 +24,14 @@ class NpmService extends Service {
         }
     }
     async getDownloads(start, end, name) {
-        const cached = this.service.redis.get(`npm_downloads_${start}_${end}_${name}`);
+        const cached = await this.service.redis.get(`npm_downloads_${start}_${end}_${name}`);
         if (cached) {
             return cached;
         }
         try {
             const res = await axios.get(`${API_URL}/downloads/point/${start}:${end}/${name}`);
             if (res.data) {
-                this.service.redis.set(`npm_downloads_${start}_${end}_${name}`, res.data, 1800);
+                await this.service.redis.set(`npm_downloads_${start}_${end}_${name}`, res.data, 1800);
                 return res.data;
             }
             return null;
