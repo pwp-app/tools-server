@@ -5,7 +5,7 @@ const qrcode = require('qrcode');
 const crypto = require('crypto');
 const jimp = require('jimp');
 const jsqr = require('jsqr');
-const ErrorMessage = require('../../utils/common/error_response');
+const R = require('../../utils/common/response');
 
 class QRCodeController extends Controller {
     async encode() {
@@ -13,15 +13,15 @@ class QRCodeController extends Controller {
         // 校验
         ctx.validate({ text: 'string', level: 'number?', width: 'number?', margin: 'number?' }, ctx.query);
         if (ctx.query.level && (ctx.query.level <= 0 || ctx.query.level > 4)) {
-            ErrorMessage(ctx, 422, 'Level must be 1 - 4');
+            R.error(ctx, 422, 'Level must be 1 - 4');
             return;
         }
         if (ctx.query.width && (ctx.query.width < 64 || ctx.query.width > 1024)) {
-            ErrorMessage(ctx, 422, 'Width must be 64 - 1024');
+            R.error(ctx, 422, 'Width must be 64 - 1024');
             return;
         }
         if (typeof ctx.query.margin !== 'undefined' && (ctx.query.margin < 0 || ctx.query.margin > 8)) {
-            ErrorMessage(ctx, 422, 'Margin must be 0 - 8');
+            R.error(ctx, 422, 'Margin must be 0 - 8');
             return;
         }
         // 构造参数
@@ -88,7 +88,7 @@ class QRCodeController extends Controller {
         try {
             image = await jimp.read(url);
         } catch (e) {
-            ErrorMessage(ctx, 500, 'Cannot download image from URL.');
+            R.error(ctx, 500, 'Cannot download image from URL.');
             return false;
         }
         return this.readQRCode(ctx, image, hash);
@@ -96,7 +96,7 @@ class QRCodeController extends Controller {
 
     async decodeByBase64(ctx, base64) {
         if (!(/^data:image\/(png|jpeg);base64,/.test(base64))) {
-            ErrorMessage(ctx, 400, 'Param base64 must be a dataURL.');
+            R.error(ctx, 400, 'Param base64 must be a dataURL.');
             return false;
         }
         const sha256 = crypto.createHash('sha256');
@@ -109,7 +109,7 @@ class QRCodeController extends Controller {
         try {
             image = await jimp.read(buffer);
         } catch (e) {
-            ErrorMessage(ctx, 500, 'Cannot read this image.');
+            R.error(ctx, 500, 'Cannot read this image.');
             return false;
         }
         return this.readQRCode(ctx, image, hash);
@@ -119,7 +119,7 @@ class QRCodeController extends Controller {
         const { width, height, data } = image.bitmap;
         const code = jsqr(data, width, height);
         if (!code) {
-            ErrorMessage(ctx, 500, 'Cannot parse QRCode in this image.');
+            R.error(ctx, 500, 'Cannot parse QRCode in this image.');
             return false;
         }
         ctx.body = {
@@ -142,7 +142,7 @@ class QRCodeController extends Controller {
         const { ctx } = this;
         ctx.validate({ url: 'url?', base64: 'string?' });
         if (!ctx.request.body.url && !ctx.request.body.base64) {
-            ErrorMessage(ctx, 400, 'Must submit a url or base64 encoded image.');
+            R.error(ctx, 400, 'Must submit a url or base64 encoded image.');
             return;
         }
         if (ctx.request.body.url) {
