@@ -30,6 +30,24 @@
 
 参数二选一，GET方法只支持提交图片的URL。
 
+## npm
+
+提供查询npm包信息和下载量的服务。
+
+### API
+
+/npm/registry
+
+支持方法：GET
+
+提交参数：package:string
+
+/npm/downloads
+
+支持方法：GET
+
+提交参数：start:string(YYYY-MM-DD), end:string(YYYY-MM-DD), package:string
+
 ## 部署说明
 
 参考egg.js服务器通用的部署方法，在克隆本仓库代码后，使用npm install安装依赖，并安装egg-scripts，即可使用npm run start启动服务器。

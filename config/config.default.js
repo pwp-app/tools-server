@@ -26,10 +26,10 @@ module.exports = () => {
         csrf: {
             enable: false,
         },
+        domainWhiteList: ['http://localhost:8080', 'http://packages.pwp.app'],
     };
 
     config.cors = {
-        origin: '*',
         allowMethods: 'GET,POST',
     };
 
