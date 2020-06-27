@@ -11,4 +11,7 @@ module.exports = app => {
     router.get(`/${api_version}/qrcode/encode`, controller[api_version].qrcode.encode);
     router.get(`/${api_version}/qrcode/decode`, controller[api_version].qrcode.decodeGet);
     router.post(`/${api_version}/qrcode/decode`, controller[api_version].qrcode.decodePost);
+    // npm
+    router.get(`/${api_version}/npm/registry`, controller[api_version].npm.registry);
+    router.get(`/${api_version}/npm/downloads`, controller[api_version].npm.downloads);
 };
