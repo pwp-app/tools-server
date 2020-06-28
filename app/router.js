@@ -14,4 +14,6 @@ module.exports = app => {
     // npm
     router.get(`/${api_version}/npm/registry`, controller[api_version].npm.registry);
     router.get(`/${api_version}/npm/downloads`, controller[api_version].npm.downloads);
+    // github
+    router.get(`/${api_version}/github/readme`, controller[api_version].github.readme);
 };

@@ -48,6 +48,20 @@
 
 提交参数：start:string(YYYY-MM-DD), end:string(YYYY-MM-DD), package:string
 
+## GitHub
+
+提供对接GitHub API的一些服务。
+
+### API
+
+/github/readme
+
+获取某个repo的Readme。
+
+支持方法：GET
+
+提交参数：repo:string(owner/repoName)
+
 ## 部署说明
 
 参考egg.js服务器通用的部署方法，在克隆本仓库代码后，使用npm install安装依赖，并安装egg-scripts，即可使用npm run start启动服务器。
